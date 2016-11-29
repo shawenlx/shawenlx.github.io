@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="source_code," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="UITableView+FDTemplateLayoutCell 源码探究
+
+在我们日常的业务中，常常伴随大量的UITableView，然而动态地计算Cell的高度常常困扰着我。自从使用了这个组件之后，一切都变得没那么复杂。所以深入学习下这个框架的组件的实现原理。
+框架地址：https://github.com/forkingdog/UITableView-FDTemplateLayoutCell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UITableView+FDTemplateLayoutCell 源码探究">
+<meta property="og:url" content="http://shawenlx.com/2016/11/27/UITableView-FDTemplateLayoutCell-源码探究/index.html">
+<meta property="og:site_name" content="Shawenlx's Notes">
+<meta property="og:description" content="UITableView+FDTemplateLayoutCell 源码探究
+
+在我们日常的业务中，常常伴随大量的UITableView，然而动态地计算Cell的高度常常困扰着我。自从使用了这个组件之后，一切都变得没那么复杂。所以深入学习下这个框架的组件的实现原理。
+框架地址：https://github.com/forkingdog/UITableView-FDTemplateLayoutCell">
+<meta property="og:updated_time" content="2016-11-29T18:04:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UITableView+FDTemplateLayoutCell 源码探究">
+<meta name="twitter:description" content="UITableView+FDTemplateLayoutCell 源码探究
+
+在我们日常的业务中，常常伴随大量的UITableView，然而动态地计算Cell的高度常常困扰着我。自从使用了这个组件之后，一切都变得没那么复杂。所以深入学习下这个框架的组件的实现原理。
+框架地址：https://github.com/forkingdog/UITableView-FDTemplateLayoutCell">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shawenlx.com/2016/11/27/UITableView-FDTemplateLayoutCell-源码探究/"/>
+
+
+
+
+
+  <title> UITableView+FDTemplateLayoutCell 源码探究 | Shawenlx's Notes </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shawenlx's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://shawenlx.com/2016/11/27/UITableView-FDTemplateLayoutCell-源码探究/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Liuxi">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Shawenlx's Notes">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Shawenlx's Notes" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                UITableView+FDTemplateLayoutCell 源码探究
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-27T13:53:00+08:00">
+                2016-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/source-code/" itemprop="url" rel="index">
+                    <span itemprop="name">source_code</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="UITableView-FDTemplateLayoutCell-源码探究"><a href="#UITableView-FDTemplateLayoutCell-源码探究" class="headerlink" title="UITableView+FDTemplateLayoutCell 源码探究"></a>UITableView+FDTemplateLayoutCell 源码探究</h2><hr>
+<ul>
+<li>在我们日常的业务中，常常伴随大量的UITableView，然而动态地计算Cell的高度常常困扰着我。自从使用了这个组件之后，一切都变得没那么复杂。所以深入学习下这个框架的组件的实现原理。</li>
+<li>框架地址：<a href="https://github.com/forkingdog/UITableView-FDTemplateLayoutCell" target="_blank" rel="external">https://github.com/forkingdog/UITableView-FDTemplateLayoutCell</a></li>
+</ul>
+<hr>
+<h3 id="代码文件目录"><a href="#代码文件目录" class="headerlink" title="代码文件目录"></a>代码文件目录</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache.h</div><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache.m</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache.h</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache.m</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell.h</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell.m</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug.h</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug.m</div></pre></td></tr></table></figure>
+<hr>
+<p>首先，介绍一下这几个类的基本功能，再层层推进，逐一分析。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache，主要负责cell通过<span class="built_in">NSIndexPath</span>进行缓存高度的功能</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache，主要负责cell通过key值进行缓存高度的功能</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell，提供接口方法方便用户定义cell的数据源，以及帮助我们计算cell的高度</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug，提供一些Debug打印信息</div></pre></td></tr></table></figure>
+<hr>
+<p>关于这个框架，坦白说，从代码中看，作者无疑秀了一波runtime底层的功底，让我这种小白起初一脸懵逼。自然我得换种思路来解读这个框架，那就是从字数最少的类入手吧。</p>
+<h3 id="UITableView-FDTemplateLayoutCellDebug"><a href="#UITableView-FDTemplateLayoutCellDebug" class="headerlink" title="UITableView+FDTemplateLayoutCellDebug"></a>UITableView+FDTemplateLayoutCellDebug</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDTemplateLayoutCellDebug</span>)</span></div><div class="line"></div><div class="line"><span class="comment">//设置Debug模式是否打开</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> fd_debugLogEnabled;</div><div class="line"></div><div class="line"><span class="comment">//通过该方法，传递NSLog打印对应的Debug信息</span></div><div class="line">- (<span class="keyword">void</span>)fd_debugLog:(<span class="built_in">NSString</span> *)message;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UITableView</span> (<span class="title">FDTemplateLayoutCellDebug</span>)</span></div><div class="line"></div><div class="line">- (<span class="built_in">BOOL</span>)fd_debugLogEnabled &#123;</div><div class="line">    <span class="keyword">return</span> [objc_getAssociatedObject(<span class="keyword">self</span>, _cmd) boolValue];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setFd_debugLogEnabled:(<span class="built_in">BOOL</span>)debugLogEnabled &#123;</div><div class="line">    objc_setAssociatedObject(<span class="keyword">self</span>, <span class="keyword">@selector</span>(fd_debugLogEnabled), @(debugLogEnabled), OBJC_ASSOCIATION_RETAIN);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)fd_debugLog:(<span class="built_in">NSString</span> *)message &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.fd_debugLogEnabled) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"** FDTemplateLayoutCell ** %@"</span>, message);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<ul>
+<li>在分类中，如果要声明属性，可以通过使用关联度对象( AssociatedObject ), 通过objc_setAssociatedObject() 添加属性，objc_getAssociatedObject() 获取属性。实际上，相当于在运行时系统中动态地在内存中开辟一块空间，存储debugLogEnabled这个BOOL变量，类似懒加载的方式，通过runtime实现setter &amp; getter方法。</li>
+<li>关于runtime的知识点，推荐这篇博客:<a href="http://yulingtianxia.com/blog/2014/11/05/objective-c-runtime/" target="_blank" rel="external">http://yulingtianxia.com/blog/2014/11/05/objective-c-runtime/</a></li>
+</ul>
+<hr>
+<h3 id="UITableView-FDKeyedHeightCache"><a href="#UITableView-FDKeyedHeightCache" class="headerlink" title="UITableView+FDKeyedHeightCache"></a>UITableView+FDKeyedHeightCache</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FDKeyedHeightCache</span> : <span class="title">NSObject</span></span></div><div class="line"></div><div class="line"><span class="comment">//判断缓存中是否存在key为值的缓存高度</span></div><div class="line">- (<span class="built_in">BOOL</span>)existsHeightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key;</div><div class="line"></div><div class="line"><span class="comment">//对指定key的cell设置高度为height</span></div><div class="line">- (<span class="keyword">void</span>)cacheHeight:(<span class="built_in">CGFloat</span>)height byKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key;</div><div class="line"></div><div class="line"><span class="comment">//从缓存中获取对应key的cell的高度height值</span></div><div class="line">- (<span class="built_in">CGFloat</span>)heightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key;</div><div class="line"></div><div class="line"><span class="comment">//从缓存中删除指定key的cell的值</span></div><div class="line">- (<span class="keyword">void</span>)invalidateHeightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key;</div><div class="line"></div><div class="line"><span class="comment">//移除缓存中所有的cell的高度缓存值</span></div><div class="line">- (<span class="keyword">void</span>)invalidateAllHeightCache;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDKeyedHeightCache</span>)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>) FDKeyedHeightCache *fd_keyedHeightCache;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<ul>
+<li>先来看看FDKeyedHeightCache类中声明的属性</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSMutableDictionary</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;, <span class="built_in">NSNumber</span> *&gt; *mutableHeightsByKeyForPortrait;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSMutableDictionary</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;, <span class="built_in">NSNumber</span> *&gt; *mutableHeightsByKeyForLandscape;</div></pre></td></tr></table></figure>
+<p>不难看出，这是两个指定泛型的可变字典。</p>
+<ul>
+<li>mutableHeightsByKeyForPortrait : 用于缓存设备竖直放置时，对应key的cell的高度值。</li>
+<li>mutableHeightsByKeyForLandscape : 用于缓存设备横向放置时，对应key的cell的高度值。</li>
+</ul>
+<hr>
+<ul>
+<li>FDKeyedHeightCache中的接口方法</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">BOOL</span>)existsHeightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key &#123;</div><div class="line">    <span class="built_in">NSNumber</span> *number = <span class="keyword">self</span>.mutableHeightsByKeyForCurrentOrientation[key];</div><div class="line">    <span class="keyword">return</span> number &amp;&amp; ![number isEqualToNumber:@<span class="number">-1</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)cacheHeight:(<span class="built_in">CGFloat</span>)height byKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key &#123;</div><div class="line">    <span class="keyword">self</span>.mutableHeightsByKeyForCurrentOrientation[key] = @(height);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">CGFloat</span>)heightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key &#123;</div><div class="line"><span class="meta">#if CGFLOAT_IS_DOUBLE</span></div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.mutableHeightsByKeyForCurrentOrientation[key] doubleValue];</div><div class="line"><span class="meta">#else</span></div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span>.mutableHeightsByKeyForCurrentOrientation[key] floatValue];</div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)invalidateHeightForKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key &#123;</div><div class="line">    [<span class="keyword">self</span>.mutableHeightsByKeyForPortrait removeObjectForKey:key];</div><div class="line">    [<span class="keyword">self</span>.mutableHeightsByKeyForLandscape removeObjectForKey:key];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)invalidateAllHeightCache &#123;</div><div class="line">    [<span class="keyword">self</span>.mutableHeightsByKeyForPortrait removeAllObjects];</div><div class="line">    [<span class="keyword">self</span>.mutableHeightsByKeyForLandscape removeAllObjects];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>这些方法并不晦涩，看到这里，大家不禁会问，self.mutableHeightsByKeyForCurrentOrientation从何而来，这也是我觉得这个类中，细节处理比较好的地方，由于此处考虑到缓存的高度区别了设备方向，所以框架作者，通过一个getter方法来获取对应的存放高度的字典。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">NSMutableDictionary</span>&lt;<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;, <span class="built_in">NSNumber</span> *&gt; *)mutableHeightsByKeyForCurrentOrientation &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">UIDeviceOrientationIsPortrait</span>([<span class="built_in">UIDevice</span> currentDevice].orientation) ? <span class="keyword">self</span>.mutableHeightsByKeyForPortrait: <span class="keyword">self</span>.mutableHeightsByKeyForLandscape;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>根据UIDeviceOrientationIsPortrait()函数，传入当前设备的放置方向（[UIDevice currentDevice].orientation</p>
+<p>）进行判断。从而便可以通过属性简洁判断需要从那个字典中取值了。</p>
+</li>
+</ul>
+<hr>
+<h3 id="UITableView-FDIndexPathHeightCache"><a href="#UITableView-FDIndexPathHeightCache" class="headerlink" title="UITableView+FDIndexPathHeightCache"></a>UITableView+FDIndexPathHeightCache</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FDIndexPathHeightCache</span> : <span class="title">NSObject</span></span></div><div class="line"></div><div class="line"><span class="comment">// 如果您使用索引路径获取高度缓存，则自动启用</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> automaticallyInvalidateEnabled;</div><div class="line"></div><div class="line"><span class="comment">// Height cache</span></div><div class="line">- (<span class="built_in">BOOL</span>)existsHeightAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div><div class="line">- (<span class="keyword">void</span>)cacheHeight:(<span class="built_in">CGFloat</span>)height byIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div><div class="line">- (<span class="built_in">CGFloat</span>)heightForIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div><div class="line">- (<span class="keyword">void</span>)invalidateHeightAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div><div class="line">- (<span class="keyword">void</span>)invalidateAllHeightCache;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDIndexPathHeightCache</span>)</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>, <span class="keyword">readonly</span>) FDIndexPathHeightCache *fd_indexPathHeightCache;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDIndexPathHeightCacheInvalidation</span>)</span></div><div class="line"><span class="comment">/// 当你不想通过删除缓存中的高度来刷新数据源重新计算时，可以调用这个方法。</span></div><div class="line"><span class="comment">/// 该方法中用过runtime重写了tableView中修改cell的一些方法，例如插入cell，删除cell，移动cell，以及reloadData方法。</span></div><div class="line">- (<span class="keyword">void</span>)fd_reloadDataWithoutInvalidateIndexPathHeightCache;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<ul>
+<li>首先看看FDIndexPathHeightCache中设置的属性</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="built_in">NSMutableArray</span>&lt;<span class="built_in">NSMutableArray</span>&lt;<span class="built_in">NSNumber</span> *&gt; *&gt; FDIndexPathHeightsBySection;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">FDIndexPathHeightCache</span> ()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) FDIndexPathHeightsBySection *heightsBySectionForPortrait;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) FDIndexPathHeightsBySection *heightsBySectionForLandscape;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>通过前面key的高度缓存分析，不难猜出这几个属性是干什么的。</p>
+<ul>
+<li>由于通过NSIndexPath获取高度缓存，NSIndexPath对应section, 以及indexPath。FDIndexPathHeightsBySection这个数组，通过数组嵌套字典的数据结构来存储，不同的section组中对应的cell的高度缓存。</li>
+</ul>
+<hr>
+<ul>
+<li><p>FDIndexPathHeightCache中的方法</p>
+<p>由于头文件声明的几个接口方法，与FDKeyedHeightCache中的思路类似，就不再费口舌了，大家翻看源码便一目了然。</p>
+</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)enumerateAllOrientationsUsingBlock:(<span class="keyword">void</span> (^)(FDIndexPathHeightsBySection *heightsBySection))block &#123;</div><div class="line">    block(<span class="keyword">self</span>.heightsBySectionForPortrait);</div><div class="line">    block(<span class="keyword">self</span>.heightsBySectionForLandscape);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)invalidateHeightAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath &#123;</div><div class="line">    [<span class="keyword">self</span> buildCachesAtIndexPathsIfNeeded:@[indexPath]];</div><div class="line">    [<span class="keyword">self</span> enumerateAllOrientationsUsingBlock:^(FDIndexPathHeightsBySection *heightsBySection &#123;</div><div class="line">        heightsBySection[indexPath.section][indexPath.row] = @<span class="number">-1</span>;</div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)invalidateAllHeightCache &#123;</div><div class="line">    [<span class="keyword">self</span> enumerateAllOrientationsUsingBlock:^(FDIndexPathHeightsBySection *heightsBySection) &#123;</div><div class="line">        [heightsBySection removeAllObjects];</div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)buildCachesAtIndexPathsIfNeeded:(<span class="built_in">NSArray</span> *)indexPaths &#123;</div><div class="line">    <span class="comment">// Build every section array or row array which is smaller than given index path.</span></div><div class="line">    [indexPaths enumerateObjectsUsingBlock:^(<span class="built_in">NSIndexPath</span> *indexPath, <span class="built_in">NSUInteger</span> idx, <span class="built_in">BOOL</span> *stop) &#123;</div><div class="line">        [<span class="keyword">self</span> buildSectionsIfNeeded:indexPath.section];</div><div class="line">        [<span class="keyword">self</span> buildRowsIfNeeded:indexPath.row inExistSection:indexPath.section];</div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)buildSectionsIfNeeded:(<span class="built_in">NSInteger</span>)targetSection &#123;</div><div class="line">    [<span class="keyword">self</span> enumerateAllOrientationsUsingBlock:^(FDIndexPathHeightsBySection *heightsBySection) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">NSInteger</span> section = <span class="number">0</span>; section &lt;= targetSection; ++section) &#123;</div><div class="line">            <span class="keyword">if</span> (section &gt;= heightsBySection.count) &#123;</div><div class="line">                heightsBySection[section] = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)buildRowsIfNeeded:(<span class="built_in">NSInteger</span>)targetRow inExistSection:(<span class="built_in">NSInteger</span>)section &#123;</div><div class="line">    [<span class="keyword">self</span> enumerateAllOrientationsUsingBlock:^(FDIndexPathHeightsBySection *heightsBySection) &#123;</div><div class="line">        <span class="built_in">NSMutableArray</span>&lt;<span class="built_in">NSNumber</span> *&gt; *heightsByRow = heightsBySection[section];</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">NSInteger</span> row = <span class="number">0</span>; row &lt;= targetRow; ++row) &#123;</div><div class="line">            <span class="keyword">if</span> (row &gt;= heightsByRow.count) &#123;</div><div class="line">                heightsByRow[row] = @<span class="number">-1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>这几个封装的方法，主要一点就是通过block来回调，判断删除NSIndexPath对应的cell高度缓存。</li>
+</ul>
+<hr>
+<ul>
+<li>在这个类中，最核心的莫过于UITableView (FDIndexPathHeightCacheInvalidation) 这个分类的实现细节，废话少说，继续看代码。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//我们只是转发主调用，在崩溃报告中，最顶层的方法在堆栈可能存在FD，</span></div><div class="line"><span class="comment">//但它真的不是我们的错误，你应该检查你的表视图的数据源和</span></div><div class="line"><span class="comment">//重新加载时显示单元格不匹配。</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">void</span> __FD_TEMPLATE_LAYOUT_CELL_PRIMARY_CALL_IF_CRASH_NOT_OUR_BUG__(<span class="keyword">void</span> (^callout)(<span class="keyword">void</span>)) &#123;</div><div class="line">    callout();</div><div class="line">&#125;</div><div class="line"><span class="meta">#define FDPrimaryCall(...) do &#123;__FD_TEMPLATE_LAYOUT_CELL_PRIMARY_CALL_IF_CRASH_NOT_OUR_BUG__(^&#123;__VA_ARGS__&#125;);&#125; while(0)</span></div></pre></td></tr></table></figure>
+<ul>
+<li>调用的接口方法</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)fd_reloadDataWithoutInvalidateIndexPathHeightCache &#123;</div><div class="line">    FDPrimaryCall([<span class="keyword">self</span> fd_reloadData];);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>这个方法，主要调用的是［self fd_reloadData］，看到这里的时候，我们的第一反应应该是此处通过runtime 交换了系统方法的实现。这是一种动态的拦截技巧，也算是基础的runtime知识了，懵逼的小伙伴可以认真阅读下前面提到的关于runtime的大牛博文。</li>
+</ul>
+<hr>
+<ul>
+<li>既然如此，先来看看作者重写了哪些系统的方法吧。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">+ (<span class="keyword">void</span>)load &#123;</div><div class="line">    <span class="comment">// All methods that trigger height cache's invalidation</span></div><div class="line">    SEL selectors[] = &#123;</div><div class="line">        <span class="keyword">@selector</span>(reloadData),</div><div class="line">        <span class="keyword">@selector</span>(insertSections:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(deleteSections:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(reloadSections:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(moveSection:toSection:),</div><div class="line">        <span class="keyword">@selector</span>(insertRowsAtIndexPaths:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(deleteRowsAtIndexPaths:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(reloadRowsAtIndexPaths:withRowAnimation:),</div><div class="line">        <span class="keyword">@selector</span>(moveRowAtIndexPath:toIndexPath:)</div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="built_in">NSUInteger</span> index = <span class="number">0</span>; index &lt; <span class="keyword">sizeof</span>(selectors) / <span class="keyword">sizeof</span>(SEL); ++index) &#123;</div><div class="line">        SEL originalSelector = selectors[index];</div><div class="line">        SEL swizzledSelector = <span class="built_in">NSSelectorFromString</span>([<span class="string">@"fd_"</span> stringByAppendingString:<span class="built_in">NSStringFromSelector</span>(originalSelector)]);</div><div class="line">        Method originalMethod = class_getInstanceMethod(<span class="keyword">self</span>, originalSelector);</div><div class="line">        Method swizzledMethod = class_getInstanceMethod(<span class="keyword">self</span>, swizzledSelector);</div><div class="line">        method_exchangeImplementations(originalMethod, swizzledMethod);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>通过method_exchangeImplementations() C函数， 将重写的方法，一一交换成重写的方法。</li>
+<li>在这些fd_方法中的实现细节中，需要注意的一点就是，如果对应的fd_indexPathHeightCache设置了automaticallyInvalidateEnabled属性为YES时，对应的方法对高度缓存做相应的处理，重新更新fd_indexPathHeightCache中存储的高度缓存。</li>
+<li>当第一次reloadData，或者cell的行数发生变化（增减行，section) ，会先在tableview不处于滚动状态的时候异步计算那些没有被计算过的cell的高度，做预缓存，这个想法非常赞。</li>
+<li>使用者需要小心，这些调用是异步的, tableview delegate有可能会在预缓存计算的时候不存在了，导致程序崩溃，所以使用者在tableview需要析构的时候，在对应的tableview controller的dealloc中讲self.tableview.delegate = nil；，确保delegate后续不会是一个野指针。</li>
+</ul>
+<hr>
+<h3 id="UITableView-FDTemplateLayoutCell"><a href="#UITableView-FDTemplateLayoutCell" class="headerlink" title="UITableView+FDTemplateLayoutCell"></a>UITableView+FDTemplateLayoutCell</h3><p>至此，我们已经分析了几个子类的实现逻辑，唯一剩下一个分类，也是我们使用这个框架的入口 <strong>FDTemplateLayoutCell</strong>分类。全面了解这个组件近在咫尺。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDTemplateLayoutCell</span>)</span></div><div class="line"></div><div class="line"><span class="comment">/* 为给定的重用标识符访问内部模板布局单元格。</span></div><div class="line"> * 一般来说，你不需要知道这些模板布局单元格。</div><div class="line"> * @param identifier重用必须注册的单元格的标识符。</div><div class="line">*/ </div><div class="line">- (__kindof <span class="built_in">UITableViewCell</span> *)fd_templateCellForReuseIdentifier:(<span class="built_in">NSString</span> *)identifier;</div><div class="line"></div><div class="line"><span class="comment">/* 返回由重用标识符指定并配置的类型的单元格的高度, 并通过block来配置。</span></div><div class="line"> * 单元格将被放置在固定宽度，垂直扩展的基础上，相对于其动态内容，使用自动布局。 </div><div class="line"> * 因此，这些必要的单元被设置为自适应，即其内容总是确定它的宽度给定的宽度等于tableview的宽度。</div><div class="line"> * @param identifier用于检索和维护模板的字符串标识符cell通过系统方法</div><div class="line"> * '- dequeueReusableCellWithIdentifier：'</div><div class="line"> * @param configuration用于配置和提供内容的可选块到模板单元格。 </div><div class="line"> * 配置应该是最小的滚动性能足以计算单元格的高度。</div><div class="line">*/</div><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration;</div><div class="line"></div><div class="line"><span class="comment">/* 计算的高度将通过其索引路径进行高速缓存，当需要时返回高速缓存的高度，因此，可以节省大量额外的高度计算。</span></div><div class="line"> * 无需担心数据源更改时使缓存高度无效，它将在调用“-reloadData”或任何触发方法时自动完成UITableView的重新加载。</div><div class="line"> * @param indexPath此单元格的高度缓存所属的位置。</div><div class="line">*/</div><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier cacheByIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration;</div><div class="line"></div><div class="line"><span class="comment">/* 此方法通过模型实体的标识符缓存高度。</span></div><div class="line"> * 如果你的模型改变，调用“-invalidateHeightForKey:(id &lt;NSCopying&gt;)key”到无效缓存并重新计算，它比“cacheByIndexPath”方便得多。</div><div class="line"> * @param key model entity的标识符，其数据配置一个单元格。</div><div class="line">*/ </div><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier cacheByKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableView</span> (<span class="title">FDTemplateLayoutHeaderFooterView</span>)</span></div><div class="line"></div><div class="line"><span class="comment">/* 返回在具有重用标识符的表视图中注册的Header或Footer视图的高度。</span></div><div class="line"> * 在调用“ - [UITableView registerNib / Class：forHeaderFooterViewReuseIdentifier]”之后使用它，</div><div class="line"> * 与“-fd_heightForCellWithIdentifier：configuration：”相同。</div><div class="line"> * 它将调用“-sizeThatFits：”</div><div class="line"> * UITableViewHeaderFooterView的子类不使用自动布局。</div><div class="line">*/ </div><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForHeaderFooterViewWithIdentifier:(<span class="built_in">NSString</span> *)identifier configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> headerFooterView))configuration;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableViewCell</span> (<span class="title">FDTemplateLayoutCell</span>)</span></div><div class="line"><span class="comment">/* 指示这是仅用于计算的模板布局单元格。</span></div><div class="line"> * 当配置单元格时，如果有非UI的副作用，你可能需要这个。</div><div class="line"> * 类似:</div><div class="line"> *   - (void)configureCell:(FooCell *)cell atIndexPath:(NSIndexPath *)indexPath &#123;</div><div class="line"> *       cell.entity = [self entityAtIndexPath:indexPath];</div><div class="line"> *       if (!cell.fd_isTemplateLayoutCell) &#123;</div><div class="line"> *           [self notifySomething]; // non-UI side effects</div><div class="line"> *       &#125;</div><div class="line"> *   &#125;</div><div class="line">*/</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> fd_isTemplateLayoutCell;</div><div class="line"></div><div class="line"><span class="comment">/* 启用以强制此模板布局单元格使用“框架布局”而不是“自动布局”，</span></div><div class="line"> * 并且通过调用“-sizeThatFits：”来询问单元格的高度，所以你必须重写这个方法。</div><div class="line"> * 仅当要手动控制此模板布局单元格的高度时才使用此属性</div><div class="line"> * 计算模式，默认为NO。</div><div class="line">*/</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> fd_enforceFrameLayout;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>先来看看我们平时开发中最频繁调用的两个方法</li>
+<li>(CGFloat)fd_heightForCellWithIdentifier:(NSString <em>)identifier cacheByIndexPath:(NSIndexPath </em>)indexPath configuration:(void (^)(id cell))configuration;</li>
+<li>(CGFloat)fd_heightForCellWithIdentifier:(NSString *)identifier cacheByKey:(id<nscopying>)key configuration:(void (^)(id cell))configuration;</nscopying></li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier cacheByIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration &#123;</div><div class="line">    <span class="keyword">if</span> (!identifier || !indexPath) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// Hit cache</span></div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span>.fd_indexPathHeightCache existsHeightAtIndexPath:indexPath]) &#123;</div><div class="line">        <span class="keyword">return</span> [<span class="keyword">self</span>.fd_indexPathHeightCache heightForIndexPath:indexPath];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">CGFloat</span> height = [<span class="keyword">self</span> fd_heightForCellWithIdentifier:identifier configuration:configuration];</div><div class="line">    [<span class="keyword">self</span>.fd_indexPathHeightCache cacheHeight:height byIndexPath:indexPath];</div><div class="line"></div><div class="line">    <span class="keyword">return</span> height;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier cacheByKey:(<span class="keyword">id</span>&lt;<span class="built_in">NSCopying</span>&gt;)key configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration &#123;</div><div class="line">    <span class="keyword">if</span> (!identifier || !key) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// Hit cache</span></div><div class="line">    <span class="keyword">if</span> ([<span class="keyword">self</span>.fd_keyedHeightCache existsHeightForKey:key]) &#123;</div><div class="line">        <span class="built_in">CGFloat</span> cachedHeight = [<span class="keyword">self</span>.fd_keyedHeightCache heightForKey:key];</div><div class="line">        <span class="keyword">return</span> cachedHeight;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">CGFloat</span> height = [<span class="keyword">self</span> fd_heightForCellWithIdentifier:identifier configuration:configuration];</div><div class="line">    [<span class="keyword">self</span>.fd_keyedHeightCache cacheHeight:height byKey:key];</div><div class="line">    <span class="keyword">return</span> height;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>这两个方法，分别是对cell通过NSIndexPath 或者 key值 进行高度缓存，读取高度的时候，先从缓存cache中读取，如果缓存中没有，在通过[self fd_heightForCellWithIdentifier:identifier configuration:configuration]方法进行计算高度并加入缓存中。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)fd_heightForCellWithIdentifier:(<span class="built_in">NSString</span> *)identifier configuration:(<span class="keyword">void</span> (^)(<span class="keyword">id</span> cell))configuration &#123;</div><div class="line">    <span class="keyword">if</span> (!identifier) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">UITableViewCell</span> *templateLayoutCell = [<span class="keyword">self</span> fd_templateCellForReuseIdentifier:identifier];</div><div class="line">    </div><div class="line">    <span class="comment">//手动调用以确保与实际单元格的一致行为。 （显示在屏幕上）</span></div><div class="line">    [templateLayoutCell prepareForReuse];</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (configuration) &#123;</div><div class="line">        configuration(templateLayoutCell);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> fd_systemFittingHeightForConfiguratedCell:templateLayoutCell];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>通过blocks进行配置并计算cell的高度，主要通过[self fd_templateCellForReuseIdentifier:identifier]方法创建一个UITableViewCell的实例templateLayoutCell，最后再把templateLayoutCell放入[self fd_systemFittingHeightForConfiguratedCell:templateLayoutCell]中进行计算返回高度。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">- (__kindof <span class="built_in">UITableViewCell</span> *)fd_templateCellForReuseIdentifier:(<span class="built_in">NSString</span> *)identifier &#123;</div><div class="line">    <span class="built_in">NSAssert</span>(identifier.length &gt; <span class="number">0</span>, <span class="string">@"Expect a valid identifier - %@"</span>, identifier);</div><div class="line">    </div><div class="line">    <span class="built_in">NSMutableDictionary</span>&lt;<span class="built_in">NSString</span> *, <span class="built_in">UITableViewCell</span> *&gt; *templateCellsByIdentifiers = objc_getAssociatedObject(<span class="keyword">self</span>, _cmd);</div><div class="line">    <span class="keyword">if</span> (!templateCellsByIdentifiers) &#123;</div><div class="line">        templateCellsByIdentifiers = @&#123;&#125;.mutableCopy;</div><div class="line">        objc_setAssociatedObject(<span class="keyword">self</span>, _cmd, templateCellsByIdentifiers, OBJC_ASSOCIATION_RETAIN_NONATOMIC);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">UITableViewCell</span> *templateCell = templateCellsByIdentifiers[identifier];</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!templateCell) &#123;</div><div class="line">        templateCell = [<span class="keyword">self</span> dequeueReusableCellWithIdentifier:identifier];</div><div class="line">        <span class="built_in">NSAssert</span>(templateCell != <span class="literal">nil</span>, <span class="string">@"Cell must be registered to table view for identifier - %@"</span>, identifier);</div><div class="line">        templateCell.fd_isTemplateLayoutCell = <span class="literal">YES</span>;</div><div class="line">        templateCell.contentView.translatesAutoresizingMaskIntoConstraints = <span class="literal">NO</span>;</div><div class="line">        templateCellsByIdentifiers[identifier] = templateCell;</div><div class="line">        [<span class="keyword">self</span> fd_debugLog:[<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"layout cell created - %@"</span>, identifier]];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> templateCell;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>将所有创建的templateCell放置在一个字典templateCellsByIdentifiers中，并通过runtime将其加入内存中作为属性，实际上，templateCell 也是通过identifier在复用队列中获取复用的。所以，cell在使用前，应先注册为cell的复用对象。</li>
+<li>最后调用的[self fd_systemFittingHeightForConfiguratedCell:templateLayoutCell]进行高度计算。当然也是最关键的一个操作，既然这是一个高度计算的框架，那么计算的步骤当然是重中之重。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">- (<span class="built_in">CGFloat</span>)fd_systemFittingHeightForConfiguratedCell:(<span class="built_in">UITableViewCell</span> *)cell &#123;</div><div class="line">    <span class="built_in">CGFloat</span> contentViewWidth = <span class="built_in">CGRectGetWidth</span>(<span class="keyword">self</span>.frame);</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (cell.accessoryView) &#123;</div><div class="line">        <span class="comment">//如果有定制accessoryView，则去除这个宽度</span></div><div class="line">        contentViewWidth -= <span class="number">16</span> + <span class="built_in">CGRectGetWidth</span>(cell.accessoryView.frame);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//如果有系统accessoryView展示，则去除对应的宽度。</span></div><div class="line">        <span class="keyword">static</span> <span class="keyword">const</span> <span class="built_in">CGFloat</span> systemAccessoryWidths[] = &#123;</div><div class="line">            [<span class="built_in">UITableViewCellAccessoryNone</span>] = <span class="number">0</span>,</div><div class="line">            [<span class="built_in">UITableViewCellAccessoryDisclosureIndicator</span>] = <span class="number">34</span>,</div><div class="line">            [<span class="built_in">UITableViewCellAccessoryDetailDisclosureButton</span>] = <span class="number">68</span>,</div><div class="line">            [<span class="built_in">UITableViewCellAccessoryCheckmark</span>] = <span class="number">40</span>,</div><div class="line">            [<span class="built_in">UITableViewCellAccessoryDetailButton</span>] = <span class="number">48</span></div><div class="line">        &#125;;</div><div class="line">        contentViewWidth -= systemAccessoryWidths[cell.accessoryType];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">CGFloat</span> fittingHeight = <span class="number">0</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!cell.fd_enforceFrameLayout &amp;&amp; contentViewWidth &gt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">//如果是自动布局，则将contentView的宽度约束添加进去。</span></div><div class="line">        <span class="comment">//这样做的目的是让UILabel之类的内容可能多行的控件适应这个宽度折行（当然前提是我们已经设置好了这些控件的布局约束）。然后调用systemLayoutSizeFittingSize来计算高度。</span></div><div class="line">        <span class="comment">//最后移除刚才临时添加的contentView宽度约束。</span></div><div class="line">        <span class="built_in">NSLayoutConstraint</span> *widthFenceConstraint = [<span class="built_in">NSLayoutConstraint</span> constraintWithItem:cell.contentView attribute:<span class="built_in">NSLayoutAttributeWidth</span> relatedBy:<span class="built_in">NSLayoutRelationEqual</span> toItem:<span class="literal">nil</span> attribute:<span class="built_in">NSLayoutAttributeNotAnAttribute</span> multiplier:<span class="number">1.0</span> constant:contentViewWidth];</div><div class="line">        [cell.contentView addConstraint:widthFenceConstraint];</div><div class="line">        </div><div class="line">        fittingHeight = [cell.contentView systemLayoutSizeFittingSize:<span class="built_in">UILayoutFittingCompressedSize</span>].height;</div><div class="line">        [cell.contentView removeConstraint:widthFenceConstraint];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (fittingHeight == <span class="number">0</span>) &#123;</div><div class="line">        <span class="comment">// 尝试调用 '- sizeThatFits:'进行高度计算.</span></div><div class="line">        <span class="comment">// 注意：配件高度不应包括分隔线视图高度。</span></div><div class="line">        fittingHeight = [cell sizeThatFits:<span class="built_in">CGSizeMake</span>(contentViewWidth, <span class="number">0</span>)].height;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 进行完前面的逻辑后高度如果仍然为0，则使用默认行高44</span></div><div class="line">    <span class="keyword">if</span> (fittingHeight == <span class="number">0</span>) &#123;</div><div class="line">        fittingHeight = <span class="number">44</span>;        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 添加一像素作为tableView分割线高度。</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.separatorStyle != <span class="built_in">UITableViewCellSeparatorStyleNone</span>) &#123;</div><div class="line">        fittingHeight += <span class="number">1.0</span> / [<span class="built_in">UIScreen</span> mainScreen].scale;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> fittingHeight;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此，就大致将这个框架分析的差不多了，源码中，对类的实例化均为采用runtime添加AssociatedObject的方式。就不做解释了。</p>
+<hr>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><ul>
+<li><p>赏花不忘种花人，把作者关于这个框架优秀的性能分析复习下。</p>
+</li>
+<li><p>地址：<a href="http://blog.sunnyxx.com/2015/05/17/cell-height-calculation/" target="_blank" rel="external">http://blog.sunnyxx.com/2015/05/17/cell-height-calculation/</a></p>
+<p>​</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/source-code/" rel="tag"># source_code</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/09/NSOperation：初识/" rel="next" title="NSOperation：初识">
+                <i class="fa fa-chevron-left"></i> NSOperation：初识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Liuxi" />
+          <p class="site-author-name" itemprop="name">Liuxi</p>
+          <p class="site-description motion-element" itemprop="description">I love code and share.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UITableView-FDTemplateLayoutCell-源码探究"><span class="nav-number">1.</span> <span class="nav-text">UITableView+FDTemplateLayoutCell 源码探究</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码文件目录"><span class="nav-number">1.1.</span> <span class="nav-text">代码文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UITableView-FDTemplateLayoutCellDebug"><span class="nav-number">1.2.</span> <span class="nav-text">UITableView+FDTemplateLayoutCellDebug</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UITableView-FDKeyedHeightCache"><span class="nav-number">1.3.</span> <span class="nav-text">UITableView+FDKeyedHeightCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UITableView-FDIndexPathHeightCache"><span class="nav-number">1.4.</span> <span class="nav-text">UITableView+FDIndexPathHeightCache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UITableView-FDTemplateLayoutCell"><span class="nav-number">1.5.</span> <span class="nav-text">UITableView+FDTemplateLayoutCell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">1.6.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liuxi</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

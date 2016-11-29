@@ -1,0 +1,738 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="扯淡：到了新公司接手新框架之后，发现大量的使用Blocks，之前很多时候都是使用代理，突然面对这个陌生的语法，特地科普总结了一番。
+
+
+什么是Blocks
+一句话概括就是，带有局部变量的匿名函数（即不带名称的函数）。也称为闭包。
+
+Blocks语法
+ ^ 返回值类型 参数列表 表达式
+
+12//例如^int (int count) &amp;#123; return count + 1; &amp;#125;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么我选择使用Blocks">
+<meta property="og:url" content="http://shawenlx.com/2016/06/08/为什么我选择使用Blocks/index.html">
+<meta property="og:site_name" content="Shawenlx's Notes">
+<meta property="og:description" content="扯淡：到了新公司接手新框架之后，发现大量的使用Blocks，之前很多时候都是使用代理，突然面对这个陌生的语法，特地科普总结了一番。
+
+
+什么是Blocks
+一句话概括就是，带有局部变量的匿名函数（即不带名称的函数）。也称为闭包。
+
+Blocks语法
+ ^ 返回值类型 参数列表 表达式
+
+12//例如^int (int count) &amp;#123; return count + 1; &amp;#125;">
+<meta property="og:updated_time" content="2016-11-29T17:59:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为什么我选择使用Blocks">
+<meta name="twitter:description" content="扯淡：到了新公司接手新框架之后，发现大量的使用Blocks，之前很多时候都是使用代理，突然面对这个陌生的语法，特地科普总结了一番。
+
+
+什么是Blocks
+一句话概括就是，带有局部变量的匿名函数（即不带名称的函数）。也称为闭包。
+
+Blocks语法
+ ^ 返回值类型 参数列表 表达式
+
+12//例如^int (int count) &amp;#123; return count + 1; &amp;#125;">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shawenlx.com/2016/06/08/为什么我选择使用Blocks/"/>
+
+
+
+
+
+  <title> 为什么我选择使用Blocks | Shawenlx's Notes </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shawenlx's Notes</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://shawenlx.com/2016/06/08/为什么我选择使用Blocks/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Liuxi">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Shawenlx's Notes">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Shawenlx's Notes" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                为什么我选择使用Blocks
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-08T21:00:00+08:00">
+                2016-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>扯淡：到了新公司接手新框架之后，发现大量的使用Blocks，之前很多时候都是使用代理，突然面对这个陌生的语法，特地科普总结了一番。</li>
+</ul>
+<hr>
+<h3 id="什么是Blocks"><a href="#什么是Blocks" class="headerlink" title="什么是Blocks"></a>什么是Blocks</h3><ul>
+<li>一句话概括就是，带有局部变量的匿名函数（即不带名称的函数）。也称为<strong>闭包</strong>。</li>
+</ul>
+<h3 id="Blocks语法"><a href="#Blocks语法" class="headerlink" title="Blocks语法"></a>Blocks语法</h3><ul>
+<li><strong> ^ </strong>返回值类型 参数列表 <strong>表达式</strong></li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//例如</span></div><div class="line">^<span class="keyword">int</span> (<span class="keyword">int</span> count) &#123; <span class="keyword">return</span> count + <span class="number">1</span>; &#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>上述表达式中，返回值类型 以及 参数列表可以省略(如下), 语法加粗表明不可缺少的部分。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">^ &#123;</div><div class="line">      printf(<span class="string">"Hello, blocks"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="将Blocks声明为属性"><a href="#将Blocks声明为属性" class="headerlink" title="将Blocks声明为属性"></a>将Blocks声明为属性</h3><ul>
+<li><p>多数情况下，我们会把Blocks声明为属性，便于调用。可以利用关键字typedef 对Blocks进行别名。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> 返回值类型 (^Blocks别名)(参数列表);</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> (^blk_t)(<span class="keyword">int</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//将Blocks声明为属性</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) blk_t blk;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//对Blocks进行声明定义</span></div><div class="line">blk = ^(<span class="keyword">int</span> count) &#123; <span class="keyword">return</span> count + <span class="number">1</span>; &#125;;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//调用Blocks 和 调用C语言声明函数方式一样</span></div><div class="line"><span class="built_in">NSLog</span>(<span class="string">@"%d\n"</span>, blk(<span class="number">10</span>));</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="将Blocks作为参数传入方法中"><a href="#将Blocks作为参数传入方法中" class="headerlink" title="将Blocks作为参数传入方法中"></a>将Blocks作为参数传入方法中</h3><ul>
+<li>通常都会事先为Blocks取一个别名，一来方便理解，好吧不装逼，就是偷懒。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//定义：</span></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^Block)(<span class="keyword">int</span> a);</div><div class="line">- (<span class="keyword">void</span>)nslogParameterWithBlock:(Block)block &#123; </div><div class="line">    <span class="keyword">if</span> (block) &#123; </div><div class="line">        block(<span class="number">10</span>); </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//赋值并调用</span></div><div class="line">[object nslogParameterWithBlock:^(<span class="keyword">int</span> a) &#123; </div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%d"</span>, a);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="Blocks截获自动变量值"><a href="#Blocks截获自动变量值" class="headerlink" title="Blocks截获自动变量值"></a>Blocks截获自动变量值</h3><ul>
+<li>什么是截获自动变量值，所谓自动变量，就是局部变量。那为什么会截获呢？先来看个例子。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> val = <span class="number">10</span>;</div><div class="line"><span class="keyword">void</span>  (^block)(<span class="keyword">void</span>) = ^ &#123; printf(<span class="string">"val = %d"</span>, val); &#125;;</div><div class="line">val = <span class="number">20</span>;</div><div class="line">block();  <span class="comment">//此处调用block，打印为val = 10；</span></div></pre></td></tr></table></figure>
+<ul>
+<li>之所以没有打印val = 20，是因为该Blocks在编译期就进行了初始化，对声明的val进行截获，也就是说，把val拷贝一份存入Blocks中。所以当外部val进行了修改时，不影响Blocks截获的val值。</li>
+</ul>
+<hr>
+<h3 id="block-关键字"><a href="#block-关键字" class="headerlink" title="__block 关键字"></a>__block 关键字</h3><ul>
+<li>从上个例子中，我们知道Blocks会对变量进行截获。那如果我非要在Blocks中修改外部参数怎么办呢？我们可以通过__block关键字做到！</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">__block <span class="keyword">int</span> val = <span class="number">10</span>;</div><div class="line"><span class="keyword">void</span>  (^block)(<span class="keyword">void</span>) = ^ &#123; printf(<span class="string">"val = %d"</span>, val); &#125;;</div><div class="line">val = <span class="number">20</span>;</div><div class="line">block();  <span class="comment">//此处调用block，打印为val = 20;</span></div></pre></td></tr></table></figure>
+<ul>
+<li><strong>通过__block说明符对外部参数进行声明后，实际上，相当于在声明定义Blocks的时候，不是通过拷贝内存的方式拷贝外部参数，而是通过指针指向该外部变量，从而达到可以在Blocks中修改的效果。</strong></li>
+</ul>
+<hr>
+<h3 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h3><ul>
+<li>Blocks使用方便，但是block的内存管理确实是一项非常重要也非常容易出错的地方，稍不注意便会造成内存泄露，所以，在使用Blocks的时候，也要小心。</li>
+<li>因为是匿名函数，所以在项目中多人合作的时候，最后写上每个Blocks的注释说明。</li>
+<li>后续将继续总结Blocks的内存管理内容。</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/06/iOS-UICollectionView瀑布流/" rel="next" title="iOS UICollectionView瀑布流">
+                <i class="fa fa-chevron-left"></i> iOS UICollectionView瀑布流
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/09/关于链表的一些逻辑思维/" rel="prev" title="关于链表的一些逻辑思维">
+                关于链表的一些逻辑思维 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Liuxi" />
+          <p class="site-author-name" itemprop="name">Liuxi</p>
+          <p class="site-description motion-element" itemprop="description">I love code and share.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Blocks"><span class="nav-number">1.</span> <span class="nav-text">什么是Blocks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blocks语法"><span class="nav-number">2.</span> <span class="nav-text">Blocks语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将Blocks声明为属性"><span class="nav-number">3.</span> <span class="nav-text">将Blocks声明为属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将Blocks作为参数传入方法中"><span class="nav-number">4.</span> <span class="nav-text">将Blocks作为参数传入方法中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blocks截获自动变量值"><span class="nav-number">5.</span> <span class="nav-text">Blocks截获自动变量值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#block-关键字"><span class="nav-number">6.</span> <span class="nav-text">__block 关键字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结："><span class="nav-number">7.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liuxi</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
