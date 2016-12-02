@@ -108,7 +108,7 @@ Blocks语法
  ^ 返回值类型 参数列表 表达式
 
 12//例如^int (int count) &amp;#123; return count + 1; &amp;#125;">
-<meta property="og:updated_time" content="2016-11-29T17:59:05.000Z">
+<meta property="og:updated_time" content="2016-12-02T01:42:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="为什么我选择使用Blocks">
 <meta name="twitter:description" content="扯淡：到了新公司接手新框架之后，发现大量的使用Blocks，之前很多时候都是使用代理，突然面对这个陌生的语法，特地科普总结了一番。
@@ -412,6 +412,7 @@ Blocks语法
 </ul>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">^ &#123;</div><div class="line">      printf(<span class="string">"Hello, blocks"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
+<a id="more"></a>
 <h3 id="将Blocks声明为属性"><a href="#将Blocks声明为属性" class="headerlink" title="将Blocks声明为属性"></a>将Blocks声明为属性</h3><ul>
 <li><p>多数情况下，我们会把Blocks声明为属性，便于调用。可以利用关键字typedef 对Blocks进行别名。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> 返回值类型 (^Blocks别名)(参数列表);</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">int</span> (^blk_t)(<span class="keyword">int</span>);</div></pre></td></tr></table></figure>
