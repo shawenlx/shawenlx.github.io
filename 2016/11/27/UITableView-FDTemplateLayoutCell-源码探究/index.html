@@ -96,7 +96,7 @@
 
 在我们日常的业务中，常常伴随大量的UITableView，然而动态地计算Cell的高度常常困扰着我。自从使用了这个组件之后，一切都变得没那么复杂。所以深入学习下这个框架的组件的实现原理。
 框架地址：https://github.com/forkingdog/UITableView-FDTemplateLayoutCell">
-<meta property="og:updated_time" content="2016-11-29T18:04:41.000Z">
+<meta property="og:updated_time" content="2016-12-02T01:41:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UITableView+FDTemplateLayoutCell 源码探究">
 <meta name="twitter:description" content="UITableView+FDTemplateLayoutCell 源码探究
@@ -386,6 +386,7 @@
 <hr>
 <h3 id="代码文件目录"><a href="#代码文件目录" class="headerlink" title="代码文件目录"></a>代码文件目录</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache.h</div><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache.m</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache.h</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache.m</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell.h</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell.m</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug.h</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug.m</div></pre></td></tr></table></figure>
 <hr>
+<a id="more"></a>
 <p>首先，介绍一下这几个类的基本功能，再层层推进，逐一分析。</p>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">- <span class="built_in">UITableView</span>+FDIndexPathHeightCache，主要负责cell通过<span class="built_in">NSIndexPath</span>进行缓存高度的功能</div><div class="line">- <span class="built_in">UITableView</span>+FDKeyedHeightCache，主要负责cell通过key值进行缓存高度的功能</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCell，提供接口方法方便用户定义cell的数据源，以及帮助我们计算cell的高度</div><div class="line">- <span class="built_in">UITableView</span>+FDTemplateLayoutCellDebug，提供一些Debug打印信息</div></pre></td></tr></table></figure>
 <hr>

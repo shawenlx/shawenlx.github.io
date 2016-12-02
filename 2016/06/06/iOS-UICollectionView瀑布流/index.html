@@ -98,7 +98,7 @@
 
 12// 初始化layout后自动调动，可以在该方法中初始化一些自定义的变量参数  - (void)prepareLayout;
 12// 设置UICollectionView的内容大小，道理与UIScrollVie">
-<meta property="og:updated_time" content="2016-11-29T18:01:00.000Z">
+<meta property="og:updated_time" content="2016-12-02T01:40:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS UICollectionView瀑布流">
 <meta name="twitter:description" content="一、UICollectionViewLayout基础知识
@@ -388,6 +388,7 @@
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 设置UICollectionView的内容大小，道理与UIScrollView的contentSize类似</span></div><div class="line">  - (<span class="built_in">CGSize</span>)collectionViewContentSize;</div></pre></td></tr></table></figure>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 初始Layout外观，返回所有的布局属性</span></div><div class="line">  - (<span class="built_in">NSArray</span> *)layoutAttributesForElementsInRect:(<span class="built_in">CGRect</span>)rect;</div></pre></td></tr></table></figure>
 <figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 根据不同的indexPath，给出布局 </span></div><div class="line">  - (<span class="built_in">UICollectionViewLayoutAttributes</span> *)layoutAttributesForItemAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div></pre></td></tr></table></figure>
+<a id="more"></a>
 <h3 id="二、瀑布流布局"><a href="#二、瀑布流布局" class="headerlink" title="二、瀑布流布局"></a>二、瀑布流布局</h3><ul>
 <li>逻辑与原理</li>
 </ul>
