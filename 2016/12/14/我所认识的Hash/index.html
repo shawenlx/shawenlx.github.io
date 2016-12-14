@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="daily," />
+  <meta name="keywords" content="c / c++," />
 
 
 
@@ -84,16 +84,24 @@
 
 
 
-<meta name="description" content="前言​   2016已经接近尾声，最近时常在想，今年我都忙活了一些什么。写下这些的目的仅仅是为了记录过去一年自己的收获，以及总结一些不足。当然更重要的是对2017做一个展望和规划。">
+<meta name="description" content="我所认识的Hash
+前言​   关于Hash表，是我们经常会碰到的数据结构。大多数时候，它能高效地解决我们的一些实际问题。当然，多数情况下时间和空间正如鱼和熊掌，不可兼得。只有在特定的情况下，我们去选择适合当前需求的数据结构和算法。
+​   Hash表本质是可以理解为键值对的集合。key-value一一对应。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2016年的点滴记录">
-<meta property="og:url" content="shawenlx.cn/2016/12/12/2016年的点滴记录/index.html">
+<meta property="og:title" content="我所认识的Hash">
+<meta property="og:url" content="shawenlx.cn/2016/12/14/我所认识的Hash/index.html">
 <meta property="og:site_name" content="Shawenlx">
-<meta property="og:description" content="前言​   2016已经接近尾声，最近时常在想，今年我都忙活了一些什么。写下这些的目的仅仅是为了记录过去一年自己的收获，以及总结一些不足。当然更重要的是对2017做一个展望和规划。">
-<meta property="og:updated_time" content="2016-12-12T09:49:15.000Z">
+<meta property="og:description" content="我所认识的Hash
+前言​   关于Hash表，是我们经常会碰到的数据结构。大多数时候，它能高效地解决我们的一些实际问题。当然，多数情况下时间和空间正如鱼和熊掌，不可兼得。只有在特定的情况下，我们去选择适合当前需求的数据结构和算法。
+​   Hash表本质是可以理解为键值对的集合。key-value一一对应。">
+<meta property="og:image" content="https://odzkskevi.qnssl.com/14b4b3ec0b5261bea3a5ad9f1313252c">
+<meta property="og:updated_time" content="2016-12-14T03:01:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2016年的点滴记录">
-<meta name="twitter:description" content="前言​   2016已经接近尾声，最近时常在想，今年我都忙活了一些什么。写下这些的目的仅仅是为了记录过去一年自己的收获，以及总结一些不足。当然更重要的是对2017做一个展望和规划。">
+<meta name="twitter:title" content="我所认识的Hash">
+<meta name="twitter:description" content="我所认识的Hash
+前言​   关于Hash表，是我们经常会碰到的数据结构。大多数时候，它能高效地解决我们的一些实际问题。当然，多数情况下时间和空间正如鱼和熊掌，不可兼得。只有在特定的情况下，我们去选择适合当前需求的数据结构和算法。
+​   Hash表本质是可以理解为键值对的集合。key-value一一对应。">
+<meta name="twitter:image" content="https://odzkskevi.qnssl.com/14b4b3ec0b5261bea3a5ad9f1313252c">
 
 
 
@@ -121,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="shawenlx.cn/2016/12/12/2016年的点滴记录/"/>
+  <link rel="canonical" href="shawenlx.cn/2016/12/14/我所认识的Hash/"/>
 
 
 
 
 
-  <title> 2016年的点滴记录 | Shawenlx </title>
+  <title> 我所认识的Hash | Shawenlx </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -271,7 +279,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="shawenlx.cn/2016/12/12/2016年的点滴记录/">
+  <link itemprop="mainEntityOfPage" href="shawenlx.cn/2016/12/14/我所认识的Hash/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Liuxi">
@@ -295,7 +303,7 @@
             
             
               
-                2016年的点滴记录
+                我所认识的Hash
               
             
           </h1>
@@ -308,8 +316,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-12T17:46:38+08:00">
-                2016-12-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-14T10:59:59+08:00">
+                2016-12-14
               </time>
             
 
@@ -327,8 +335,8 @@
               <span class="post-meta-item-text">In</span>
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/daily/" itemprop="url" rel="index">
-                    <span itemprop="name">daily</span>
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
                   </a>
                 </span>
 
@@ -362,26 +370,51 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​   2016已经接近尾声，最近时常在想，今年我都忙活了一些什么。写下这些的目的仅仅是为了记录过去一年自己的收获，以及总结一些不足。当然更重要的是对2017做一个展望和规划。</p>
+        <h2 id="我所认识的Hash"><a href="#我所认识的Hash" class="headerlink" title="我所认识的Hash"></a>我所认识的Hash</h2><hr>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>​   关于Hash表，是我们经常会碰到的数据结构。大多数时候，它能高效地解决我们的一些实际问题。当然，多数情况下时间和空间正如鱼和熊掌，不可兼得。只有在特定的情况下，我们去选择适合当前需求的数据结构和算法。</p>
+<p>​   Hash表本质是可以理解为键值对的集合。key-value一一对应。</p>
 <hr>
 <a id="more"></a>
-<h3 id="大学毕业"><a href="#大学毕业" class="headerlink" title="大学毕业"></a>大学毕业</h3><p>​   乐观点想，这也算完成了人生中一个比较有意义的里程碑——大学毕业！虽说只是一所普通的二本院校，不过从拍摄毕业照，穿戴学士服到顺利获赠毕业证学位证，蛮开心的！消极地说，也算是完成了爸爸妈妈这么多年对我的一个期待，当然啦，离你们的期望或许还差得远，按照妈妈的玩笑话，大概你现在吹虚自己孩子的成绩时，可能唯有学历张不了口。半开玩笑，也许这两口子肯定想着这娃总算能不用从我们荷包里拿零花钱了。哈哈。而对于我而言，我既怀念校园生活那种轻松自由的氛围，也对踏入社会充满信心，有挑战便会有机会！</p>
-<p>​   关于自己的大学四年，是否真的是学有所成这样的一个问题。我思考了很长时间，到最后也没有一个准确的答案。有大一时候那种散漫懒散，也有后来的挑灯夜战。经历过了就是经历过了，不该有任何一点后悔。虽没有达到非常高的水平，但也算见识了高山，认识到自己仍有很多不足，既有崇拜的技术大牛，也有较长期的学习计划。我不该在此处记录下这样一句，诸如“我尽力了”的话，接下来会更加高效地运用自己的时间和规划自己的学习 生活。</p>
-<p>​   大学里，如今剩下的记忆，大概就只有实验室和哥们一起比赛刷题的时光，以及楼下的烧烤摊。感谢他们几个人，给我的生活带了很多乐趣，如今也各奔东西了，希望各自安好！</p>
-<p>​   毕业时，才清楚地认识到，其实同班同学和我并不熟悉。他们对我的认识，我猜大概就是从一个纨绔子弟变成了一个代码狂魔。所以最后分别的时光，我聚餐也没有去，因为那里不属于我。大学里，我体会孤独，所以有时候和别人谈起自己的学习经历时，我有时候甚至会有这样的想法，你朋友太多，聚会太多注定你没办法更专注地做好一件事情。</p>
-<p>​   回想起高考落榜，本下定决心要复读，不过老爸一句“你不适合读书，别浪费时间”，我至今都记得！说起这件事，四年过去了，我只是想感谢老爸！的确为我多争取了一年时间进入互联网行业，如今的大环境竞争越来越激烈，市场也越来越饱和，这一年很重要，甚至决定了我从事互联网行业，而不是去当一个销售！这一点，大概也就他能预想到，因为我一直觉得爸爸是最懂我的，也是最支持我的！即使是一向贯彻的严厉家教，似乎也让我比别人对待自己事情的时候，多了一点要求和高一点标准，总想尽力做到接近完美。</p>
+<h3 id="字符Hash的简单应用"><a href="#字符Hash的简单应用" class="headerlink" title="字符Hash的简单应用"></a>字符Hash的简单应用</h3><ul>
+<li>先来看这样一个简单的例子，有一个字符串，仅有大写字母’A’~’Z’组成，我们需要对这个字符串中所有的字母进行统计。然后输出对应的表，如 ACAADEB, 则A-&gt;3, B-&gt;1, C-&gt;1, D-&gt;1, E-&gt;1。</li>
+<li>那么如何来做这个统计呢，这时候Hash表就可以派上用场了。字符‘A’对应的ASCII码为65，那么根据Hash的思想，我们可以把一个数组中的下标映射为字符，将下标对应的值中存储我们的统计结果，比如Hash[‘A’] = 3;</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> hash[<span class="number">26</span>];</div><div class="line"><span class="built_in">string</span> str = <span class="string">"ACAADEB"</span>;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">count_char_on_string</span><span class="params">(<span class="built_in">string</span> &amp;str)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; str.length(); ++i) &#123;</div><div class="line">        ++hash[str[i] - <span class="string">'A'</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过以上这个代码，我们就能将字符串中的字符一一统计下来。贯彻的思想就是<strong>将字符映射成数组下标</strong>。</p>
 <hr>
-<h3 id="工作生活"><a href="#工作生活" class="headerlink" title="工作生活"></a>工作生活</h3><p>​   从2015年11月正式实习，说句心里话，从事iOS前端开发不是我的本意。我原本热衷地想做服务器开发，解决高并发，提高系统性能。这大概是绝大多数Acmer的追求吧，骨子里总有一点鄙视前端开发，不过现在没有了，因为前端也有很多性能优化，有很多的底层技术。以前的认识大概只是“管中窥豹，可见一斑”。底层技术在一些程序员眼中，是块硬骨头，对我而言，这是乐趣！我并不是为了重复造轮子，我或许只是担心轮子万一坏了，我能修好它。况且刨根问底本就该是一个有追求的程序员最基本的素养！</p>
-<p>​   今年从第一家公司辞职，发生了很多不愉快的事情。原来的老板和我同样承受了损失，当然他的损失更大，我也仅仅是半个月薪水。当时，厚着脸皮要回上一个月的工资只有两个想法。第一，我需要这笔钱买一张回深圳的飞机票，因为这一家公司，我对成都的互联网有了很多不好的认识和理解，也可以说是偏见吧。第二，我需要这笔钱支付我的学业贷款以及过度我在找到下一家工作前的基本开销。我是出于这两个目的才去讨要工资的，但是原来的老板做法不是很义气！甚至口放狂言侮辱我，蛮有意思的。在这家公司，iOS开发居然有这样的约束，不让我写他看不懂的代码，不让我动手改良产品框架，因为他觉得浪费时间，仅仅只是复制粘贴实现功能，而大多数时候讨论的结果仅仅以一句“你要和我配合就得按照我的来”，所以后来的代码估计没人能维护了，因为他的封装思想就是把功能代码复制粘贴到工程里，因为这样的开发氛围，我曾一度想放弃iOS。</p>
-<p>​   从辞职到找到新工作，花了一星期不到的时间。回想起面试过程，还真是捏了一把汗。挺难的，底层技术居多，不过幸运的是这一块自己平时涉猎比较多，所以回答还算满意。当然也聊到一些比较有意思的优化方案，提出一些自己对算法的理解和认识。中间聊到一些常用的开源框架，面试官很直接地问这些底层细节是怎么实现的，当时的回答差强人意，也就一笔带过了。研究开源框架是我这段时间正在进行的学习计划。在这个公司，目前总体还是蛮顺利的，工作压力也没有特别大，身边的小伙伴也都比我优秀，希望继续保持！多交流多学习多总结。</p>
-<p>​   薪水目前不是我考虑要不要来这家公司的主要依据，面对面试官提出那么多有深度的问题，我很乐意加入这个团队，以至于接到offer电话的时候，HR还没开口说薪酬待遇我已经点头欢喜答应了。事实上，我还没去过BAT，目前的公司给了我很多的发挥空间，也随着运营推广用户量在不断提升。会用心去做好每一个需求，优化自己能想到的地方，然后完善项目架构，整理一套适用于自己的项目规范和封装库，这一点仍需要积累经验不断努力！</p>
+<h3 id="字符串Hash"><a href="#字符串Hash" class="headerlink" title="字符串Hash"></a>字符串Hash</h3><ul>
+<li>既然能够将字符映射成整数，那么肯定有办法将字符串也映射成整数。</li>
+<li>关于字符串hash算法，有很多种，可以通过这篇博客了解，不同的字符串hash算法的对比。<a href="https://www.byvoid.com/blog/string-hash-compare" target="_blank" rel="external">各种字符串Hash函数比较</a></li>
+<li>此处，我仅仅以BKDRHash算法作为例子，核心的思想是通过一个选择器，我们也成为种子(seed)，通常选择种子应该是一个质数，如31， 131，1313等，这样的好处在于减少不同字符串映射为相同整数的冲突。通过一个计算公式，将不同的字符串进行转化为数字。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// BKDR Hash Function</span></div><div class="line"><span class="function"><span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="title">BKDRHash</span><span class="params">(<span class="keyword">char</span> *str)</span> </span>&#123;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> seed = <span class="number">131</span>; <span class="comment">// 31 131 1313 13131 131313 etc..</span></div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> hash = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (*str) &#123;</div><div class="line">        <span class="comment">//每转化一位字符，用当前的hash值 * seed，在加上字符的ASCII码。</span></div><div class="line">        <span class="comment">//hash * seed, 此处我们可以理解为当前字符串在前一个字符串hash值的基础上，偏移了一个种子的数级距离。</span></div><div class="line">        hash = hash * seed + (*str++);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (hash &amp; <span class="number">0x7FFFFFFF</span>); <span class="comment">//最后用hash &amp; Ox7FFFFFFF 确保hash值在unsigned int 范围中。</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>利用字符串Hash可以解决很多问题，可以做字符串匹配。效率也蛮高的，相比KMP算法或者后缀数组和AC自动机等数据结构，它也不失为一种巧妙的办法。<strong>我们可以通过将每一位计算得到的hash值存储在一个数组里，然后通过计算偏移得到子串的hash值，在于匹配串的hash值进行对比，如果相同，则说明匹配成功。</strong></p>
 <hr>
-<h3 id="关于爱情"><a href="#关于爱情" class="headerlink" title="关于爱情"></a>关于爱情</h3><p>​   弟弟刚结婚，对我而言，也算是一种激励吧！我也想早点成立自己的家庭，凡事量力而行，希望两年后能完成这件终身大事，并且希望能靠自己的积蓄完成。爸妈谋生养家并不容易，我倒是希望他们自己留点闲钱退休周游全国。也希望自己早日结束异地恋，过上真正朝夕相伴，患难同甘的生活。</p>
+<h3 id="解决字符串Hash冲突"><a href="#解决字符串Hash冲突" class="headerlink" title="解决字符串Hash冲突"></a>解决字符串Hash冲突</h3><ul>
+<li>或多或少，BKDRHash算法在极小的几率下会出现Hash冲突，解决的办法有很多，多数时候，我们采用邻接表来解决这个问题。</li>
+<li>由于算法涉及&amp;操作，会有导致冲突的可能。在多串匹配的情况下，我们需要将所有匹配字符串计算得到的hash值，存放到邻接表中，所谓的邻接表就是数组套链表。将计算到的匹配串hash值作为数组中的值，并加入到对应的链表中，如果我们计算到的hash值出现冲突的情况，就往对应链表中加入新的节点。在后续匹配的情况下，进行查找链表并做多一次简单的匹配即可。</li>
+</ul>
 <hr>
-<h3 id="关于技术"><a href="#关于技术" class="headerlink" title="关于技术"></a>关于技术</h3><p>​   关于前端，其实我觉得很多东西是相通的。iOS中也有很多时候需要和web交互，接下来的一段时间，会多抽出一点时间学学Html,CSS以及Javascript。然后严格执行目前罗列的iOS源码阅读计划，静下心来沉淀一段时间。量变到质变是一个很漫长的过程，哪怕一个月只更新一两篇博客，对自己也是一种习惯的培养，和技术的总结。开设这个博客收获还是蛮多的，也算是每天有点挂念吧，鼓励自己多去接触一些技术知识！</p>
+<h3 id="关于Hash的一个有趣应用"><a href="#关于Hash的一个有趣应用" class="headerlink" title="关于Hash的一个有趣应用"></a>关于Hash的一个有趣应用</h3><ul>
+<li>有这么一个4 * 4的棋盘，棋子有两种状态，黑色或白色。我们这个时候也可以通过Hash来记录当前棋盘的信息。</li>
+</ul>
+<p>那么对应的棋盘，我们用1表示黑色，用0表示白色。那么就有：</p>
+<p><img src="https://odzkskevi.qnssl.com/14b4b3ec0b5261bea3a5ad9f1313252c" alt="img"></p>
+<p>这个图转化成矩阵就是：</p>
+<p>​                               1 0 1 0</p>
+<p>​                               0 0 0 0</p>
+<p>​                               1 1 0 1</p>
+<p>​                               1 0 0 1</p>
+<p>那么如何转化成整数来记录棋盘呢？</p>
+<p>​                       2^0 2^1 2^2 2^3</p>
+<p>​                       2^4 2^5 2^6 2^7</p>
+<p>​                       2^8 2^9 2^10  2^11</p>
+<p>​                       2^12  2^13  2^14  2^15</p>
+<p>最后得到的棋盘我们可以通过判断当前棋子颜色，如果是黑色，则在对应位n上加上对应的2^n, n可以通过行列式计算出来。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> state[<span class="number">4</span>][<span class="number">4</span>]; <span class="comment">//预处理记录棋子状态</span></div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> hash = <span class="number">0</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">16</span>; ++i) &#123;</div><div class="line">    hash += state[i/<span class="number">4</span>][i%<span class="number">4</span>] * (<span class="number">1</span> &lt;&lt; i);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样我们就把棋盘信息转化成一个整数了。</p>
 <hr>
-<h3 id="展望2017"><a href="#展望2017" class="headerlink" title="展望2017"></a>展望2017</h3><p>​   多花一点时间学习，少想一些不切实际的“蓝图”。认认真真做事情，踏实低调做人。</p>
-<p>​   </p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>​   关于Hash表仍有很多的应用，在iOS中，NSDictionary就是基于Hash的实现。以后有机会会深入CF框架看看实现源码，到时候再来分享。</p>
 
       
     </div>
@@ -405,7 +438,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/daily/" rel="tag"># daily</a>
+            <a href="/tags/c-c/" rel="tag"># c / c++</a>
           
         </div>
       
@@ -414,8 +447,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/01/『Hexo』使用Hexo搭建GitHub博客/" rel="next" title="『Hexo』使用Hexo搭建GitHub博客">
-                <i class="fa fa-chevron-left"></i> 『Hexo』使用Hexo搭建GitHub博客
+              <a href="/2016/12/12/2016年的点滴记录/" rel="next" title="2016年的点滴记录">
+                <i class="fa fa-chevron-left"></i> 2016年的点滴记录
               </a>
             
           </div>
@@ -423,10 +456,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/12/14/我所认识的Hash/" rel="prev" title="我所认识的Hash">
-                我所认识的Hash <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -546,7 +575,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大学毕业"><span class="nav-number">2.</span> <span class="nav-text">大学毕业</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作生活"><span class="nav-number">3.</span> <span class="nav-text">工作生活</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于爱情"><span class="nav-number">4.</span> <span class="nav-text">关于爱情</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于技术"><span class="nav-number">5.</span> <span class="nav-text">关于技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#展望2017"><span class="nav-number">6.</span> <span class="nav-text">展望2017</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#我所认识的Hash"><span class="nav-number">1.</span> <span class="nav-text">我所认识的Hash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符Hash的简单应用"><span class="nav-number">1.2.</span> <span class="nav-text">字符Hash的简单应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串Hash"><span class="nav-number">1.3.</span> <span class="nav-text">字符串Hash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决字符串Hash冲突"><span class="nav-number">1.4.</span> <span class="nav-text">解决字符串Hash冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Hash的一个有趣应用"><span class="nav-number">1.5.</span> <span class="nav-text">关于Hash的一个有趣应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">1.6.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></div>
             
 
           </div>
