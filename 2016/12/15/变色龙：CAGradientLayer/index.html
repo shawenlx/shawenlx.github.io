@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="项目需求​   最近项目中需要绘制一根颜色渐变的挂线，当然也可以让UI设计做图，不过考虑到如果渐变色采用一种会变化的展示效果也许会更加炫酷些。绘制这根挂线，CAGradientLayer是不二之选。
+
+关于CAGradientLayer​   CAGradientLayer可以用来生成两种或更多颜色平滑渐变的Layer。使用Layer层的绘制，有一个很明显的优势就是：绘制过程采用了硬件加速。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="变色龙：CAGradientLayer">
+<meta property="og:url" content="shawenlx.cn/2016/12/15/变色龙：CAGradientLayer/index.html">
+<meta property="og:site_name" content="Shawenlx">
+<meta property="og:description" content="项目需求​   最近项目中需要绘制一根颜色渐变的挂线，当然也可以让UI设计做图，不过考虑到如果渐变色采用一种会变化的展示效果也许会更加炫酷些。绘制这根挂线，CAGradientLayer是不二之选。
+
+关于CAGradientLayer​   CAGradientLayer可以用来生成两种或更多颜色平滑渐变的Layer。使用Layer层的绘制，有一个很明显的优势就是：绘制过程采用了硬件加速。">
+<meta property="og:image" content="shawenlx.cn/../images/loc.png">
+<meta property="og:image" content="shawenlx.cn/../images/gradientLayerLine.gif">
+<meta property="og:updated_time" content="2016-12-15T08:04:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="变色龙：CAGradientLayer">
+<meta name="twitter:description" content="项目需求​   最近项目中需要绘制一根颜色渐变的挂线，当然也可以让UI设计做图，不过考虑到如果渐变色采用一种会变化的展示效果也许会更加炫酷些。绘制这根挂线，CAGradientLayer是不二之选。
+
+关于CAGradientLayer​   CAGradientLayer可以用来生成两种或更多颜色平滑渐变的Layer。使用Layer层的绘制，有一个很明显的优势就是：绘制过程采用了硬件加速。">
+<meta name="twitter:image" content="shawenlx.cn/../images/loc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="shawenlx.cn/2016/12/15/变色龙：CAGradientLayer/"/>
+
+
+
+
+
+  <title> 变色龙：CAGradientLayer | Shawenlx </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Shawenlx</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="shawenlx.cn/2016/12/15/变色龙：CAGradientLayer/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Liuxi">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Shawenlx">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Shawenlx" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                变色龙：CAGradientLayer
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-15T16:03:16+08:00">
+                2016-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="项目需求"><a href="#项目需求" class="headerlink" title="项目需求"></a>项目需求</h3><p>​   最近项目中需要绘制一根颜色渐变的挂线，当然也可以让UI设计做图，不过考虑到如果渐变色采用一种会变化的展示效果也许会更加炫酷些。绘制这根挂线，CAGradientLayer是不二之选。</p>
+<hr>
+<h3 id="关于CAGradientLayer"><a href="#关于CAGradientLayer" class="headerlink" title="关于CAGradientLayer"></a>关于CAGradientLayer</h3><p>​   CAGradientLayer可以用来生成两种或更多颜色平滑渐变的Layer。使用Layer层的绘制，有一个很明显的优势就是：<strong>绘制过程采用了硬件加速</strong>。</p>
+<hr>
+<a id="more"></a>
+<h3 id="CAGradientLayer的相关属性"><a href="#CAGradientLayer的相关属性" class="headerlink" title="CAGradientLayer的相关属性"></a>CAGradientLayer的相关属性</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CAGradientLayer</span> : <span class="title">CALayer</span></span></div><div class="line"></div><div class="line"><span class="comment">/* 存放每个渐变分割点的CGColorRef对象数组. 数组默认为nil. 可支持动画. */</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nullable</span>, <span class="keyword">copy</span>) <span class="built_in">NSArray</span> *colors;</div><div class="line"></div><div class="line"><span class="comment">/* 一个可选的NSNumber对象数组，定义每个对象的位置梯度分割点作为范围[0,1]中的值。 </span></div><div class="line"> * 值必须为单调递增的。 如果给出一个nil数组，分割点在[0,1]范围内均匀分布。 </div><div class="line"> * 当呈现时，在颜色被映射到输出颜色空间之前插值。 数组默认为nil。 支持动画。 </div><div class="line"> * locations数组并不是强制要求的，但是如果你给它赋值了就一定要确保locations的数组大小和colors数组大小一定要相同，否则你将会得到一个空白的渐变。</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nullable</span>, <span class="keyword">copy</span>) <span class="built_in">NSArray</span>&lt;<span class="built_in">NSNumber</span> *&gt; *locations;</div><div class="line"></div><div class="line"><span class="comment">/* 绘制到图层中时渐变的开始点和结束点的坐标空间。 </span></div><div class="line"> * 起始点对应于第一梯度停止，终点到最后一个梯度停止。 </div><div class="line"> * 两点都是在单位坐标空间中定义，然后映射到图层的边界矩形。 （即[0,0]是左下角的，[1,1]是右上角。）</div><div class="line"> * 默认值分别是[.5,0]和[.5,1]。 默认支持的是竖直方向。两者都支持动画。 </div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> startPoint;</div><div class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> endPoint;</div><div class="line"></div><div class="line"><span class="comment">/* 将绘制的渐变的种类。 目前唯一允许value是`axial'（默认值）。 */</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span>(<span class="keyword">copy</span>) <span class="built_in">NSString</span> *type;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line">  </div><div class="line"><span class="comment">/** `type' values. **/</span></div><div class="line"></div><div class="line"><span class="built_in">CA_EXTERN</span> <span class="built_in">NSString</span> * <span class="keyword">const</span> kCAGradientLayerAxial</div><div class="line">    <span class="built_in">CA_AVAILABLE_STARTING</span> (<span class="number">10.6</span>, <span class="number">3.0</span>, <span class="number">9.0</span>, <span class="number">2.0</span>);</div><div class="line"><span class="built_in">NS_ASSUME_NONNULL_END</span></div></pre></td></tr></table></figure>
+<h3 id="CAGradientLayer坐标系"><a href="#CAGradientLayer坐标系" class="headerlink" title="CAGradientLayer坐标系"></a>CAGradientLayer坐标系</h3><p>​   渐变色的作用范围，变化梯度的方向，颜色变换的作用点都和CAGradientLayer的坐标系统有关。根据下图的坐标，设定好起点和终点，渐变色的方向就会根据起点指向终点的方向来渐变了。</p>
+<p><img src="../images/loc.png" alt="loc"></p>
+<ul>
+<li>CAGradientLayer的坐标系统是从（0，0）到（1，1）绘制的矩形</li>
+<li>CAGradientLayer的frame值的size不为正方形的话，坐标系统会被拉伸</li>
+<li>CAGradientLayer的startPoint和endPoint会直接决定颜色的绘制方向</li>
+<li>CAGradientLayer的颜色分割点时以0到1的比例来计算的</li>
+</ul>
+<h3 id="CAGradientLayer渐变方向"><a href="#CAGradientLayer渐变方向" class="headerlink" title="CAGradientLayer渐变方向"></a>CAGradientLayer渐变方向</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> startPoint;</div><div class="line"><span class="keyword">@property</span> <span class="built_in">CGPoint</span> endPoint;</div></pre></td></tr></table></figure>
+<ul>
+<li>可以通过设置startPoint 以及 endPoint来设置渐变的方向，可以是水平方向的，也可以是竖直方向的，当然也可以沿着对角线进行渐变。系统默认支持的是竖直方向。</li>
+</ul>
+<hr>
+<h3 id="颜色渐变的水平线"><a href="#颜色渐变的水平线" class="headerlink" title="颜色渐变的水平线"></a>颜色渐变的水平线</h3><ul>
+<li>通过CAGradientLayer 绘制一根颜色渐变的水平线。并通过CABasicAnimation执行颜色移动的动画。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"ViewController.h"</span></span></div><div class="line"></div><div class="line"><span class="meta">#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">ViewController</span> () &lt;<span class="title">CAAnimationDelegate</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">CAGradientLayer</span>   *lineLayer;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">UIView</span>            *lineView;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSMutableArray</span>    *colorsArray;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">CABasicAnimation</span>  *gradientAnimation;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">ViewController</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)viewDidLoad &#123;</div><div class="line">    [<span class="keyword">super</span> viewDidLoad];</div><div class="line">    <span class="keyword">self</span>.view.backgroundColor = [<span class="built_in">UIColor</span> blackColor];</div><div class="line">    [<span class="keyword">self</span>.view addSubview:<span class="keyword">self</span>.lineView];</div><div class="line">    [<span class="keyword">self</span>.lineLayer addAnimation:<span class="keyword">self</span>.gradientAnimation forKey:<span class="string">@"gradientAnimate"</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)configAnimation &#123;</div><div class="line">    <span class="comment">//将颜色数组中的最后一个元素加入到第一个元素中，达到颜色移动的效果。</span></div><div class="line">    <span class="keyword">id</span> lastColor = <span class="keyword">self</span>.colorsArray.lastObject;</div><div class="line">    [<span class="keyword">self</span>.colorsArray removeLastObject];</div><div class="line">    [<span class="keyword">self</span>.colorsArray insertObject:lastColor atIndex:<span class="number">0</span>];</div><div class="line">    <span class="keyword">self</span>.lineLayer.colors = <span class="keyword">self</span>.colorsArray;</div><div class="line">    [<span class="keyword">self</span>.lineLayer addAnimation:<span class="keyword">self</span>.gradientAnimation forKey:<span class="string">@"gradientAnimate"</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark - <span class="meta-string">&lt;CAAnimationDelegate&gt;</span></span></div><div class="line">- (<span class="keyword">void</span>)animationDidStop:(<span class="built_in">CAAnimation</span> *)anim finished:(<span class="built_in">BOOL</span>)flag &#123;</div><div class="line">    [<span class="keyword">self</span> configAnimation];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark - getter </span></div><div class="line">- (<span class="built_in">CAGradientLayer</span> *)lineLayer &#123;</div><div class="line">    <span class="keyword">if</span> (!_lineLayer) &#123;</div><div class="line">        _lineLayer = [<span class="built_in">CAGradientLayer</span> layer];</div><div class="line">        _lineLayer.frame = <span class="keyword">self</span>.lineView.frame;</div><div class="line">        _lineLayer.startPoint = <span class="built_in">CGPointMake</span>(<span class="number">0.0</span>, <span class="number">0.5</span>);</div><div class="line">        _lineLayer.endPoint = <span class="built_in">CGPointMake</span>(<span class="number">1.0</span>, <span class="number">0.5</span>);</div><div class="line">        _lineLayer.colors = <span class="keyword">self</span>.colorsArray;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _lineLayer;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSMutableArray</span> *)colorsArray &#123;</div><div class="line">    <span class="keyword">if</span> (!_colorsArray) &#123;</div><div class="line">        _colorsArray = [<span class="built_in">NSMutableArray</span> array];</div><div class="line">        <span class="keyword">for</span> (<span class="built_in">NSInteger</span> hue = <span class="number">0</span>; hue != <span class="number">360</span>; hue += <span class="number">5</span>) &#123;</div><div class="line">            <span class="built_in">UIColor</span> *color = [<span class="built_in">UIColor</span> colorWithHue:<span class="number">1.0</span> * hue / <span class="number">360.0</span></div><div class="line">                                                saturation:<span class="number">1.0</span></div><div class="line">                                                brightness:<span class="number">1.0</span></div><div class="line">                                                     alpha:<span class="number">1.0</span>];</div><div class="line">            [_colorsArray addObject:(__bridge <span class="keyword">id</span>)[color <span class="built_in">CGColor</span>]];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _colorsArray;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UIView</span> *)lineView &#123;</div><div class="line">    <span class="keyword">if</span> (!_lineView) &#123;</div><div class="line">        _lineView = [[<span class="built_in">UIView</span> alloc] initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">120</span>, SCREEN_WIDTH, <span class="number">1</span>)];</div><div class="line">        [_lineView.layer addSublayer:<span class="keyword">self</span>.lineLayer];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _lineView;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">CABasicAnimation</span> *)gradientAnimation &#123;</div><div class="line">    <span class="keyword">if</span> (!_gradientAnimation) &#123;</div><div class="line">        _gradientAnimation = [<span class="built_in">CABasicAnimation</span> animationWithKeyPath:<span class="string">@"colorsAnimation"</span>];</div><div class="line">        _gradientAnimation.delegate = <span class="keyword">self</span>;</div><div class="line">        _gradientAnimation.duration = <span class="number">0.06</span>;</div><div class="line">        _gradientAnimation.toValue = <span class="keyword">self</span>.colorsArray;</div><div class="line">        [_gradientAnimation setRemovedOnCompletion:<span class="literal">YES</span>];</div><div class="line">        _gradientAnimation.fillMode = kCAFillModeForwards;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _gradientAnimation;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<h3 id="代码效果图"><a href="#代码效果图" class="headerlink" title="代码效果图"></a>代码效果图</h3><p><img src="../images/gradientLayerLine.gif" alt="loc"></p>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>其实这个小实验只是个人的自娱自乐。对于Layer的学习仍需要不断积累。多数复杂的动画都是基于简单动画的组合和扩展。</li>
+<li>另外，有一个不错的学习教材。<a href="https://zsisme.gitbooks.io/ios-/content/chapter6/cagradientLayer.html" target="_blank" rel="external">iOS Core Animation</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/14/我所认识的Hash/" rel="next" title="我所认识的Hash">
+                <i class="fa fa-chevron-left"></i> 我所认识的Hash
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+  
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="Liuxi" />
+          <p class="site-author-name" itemprop="name">Liuxi</p>
+          <p class="site-description motion-element" itemprop="description">I love code and share.</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目需求"><span class="nav-number">1.</span> <span class="nav-text">项目需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于CAGradientLayer"><span class="nav-number">2.</span> <span class="nav-text">关于CAGradientLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAGradientLayer的相关属性"><span class="nav-number">3.</span> <span class="nav-text">CAGradientLayer的相关属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAGradientLayer坐标系"><span class="nav-number">4.</span> <span class="nav-text">CAGradientLayer坐标系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAGradientLayer渐变方向"><span class="nav-number">5.</span> <span class="nav-text">CAGradientLayer渐变方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#颜色渐变的水平线"><span class="nav-number">6.</span> <span class="nav-text">颜色渐变的水平线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码效果图"><span class="nav-number">7.</span> <span class="nav-text">代码效果图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liuxi</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
